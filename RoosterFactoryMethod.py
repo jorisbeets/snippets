@@ -10,8 +10,11 @@ class Person(ABC):
     """ Basic representation of a Person """
     def __init__(self, name):
         self.name = name
-
+    
     @abstractmethod
+    def name(self):
+        return self.name
+    
     def print_name(self):
         """ Prints the name """
 
@@ -58,6 +61,9 @@ class RoosterFactory(ABC):
 class Offshore(Person):
     def __init__(self,name):
         self.name = name
+        
+    def name(self):
+        return self.name
 
     def print_name(self):
         print(f'My name is {self.name} and I work Offshore.')
@@ -65,6 +71,9 @@ class Offshore(Person):
 class Aviator(Person):
     def __init__(self,name):
         self.name = name
+
+    def name(self):
+        return self.name
 
     def print_name(self):
         print(f'My name is {self.name} and I fly Aeroplanes.')
@@ -122,18 +131,32 @@ class AviatorSched(Schedule):
         print(f'My {self.name} work schedule has {self.workdays} days on and {self.restdays} days off.')
    
 class Offshore_rooster(RoosterFactory):
-    def __init__(self, name):
+    def __init__(self, name, person, schedule):
         self.name = name
+        self.person = person
+        self.schedule = schedule
+
+    def get_person(self) -> Person:
+        return Offshore
+
+    def add_schedule(self) -> Schedule:
+        return OffshoreSched
+
+    def print_rooster(self):
+        print(f'Dit is {self.name} Rooster')
+
 
 def main():
     joris = Offshore('Joris')
-    joris.print_name()
+    print(joris.name)
     joris_schedule = OffshoreSched('normal',14,21)
     joris_schedule.get_workdates('11-11-2021')
     joris_schedule.get_restdates('11-11-2021')
-    # print(joris_schedule.workdates)
-    # print(joris_schedule.restdates)
+    print(joris_schedule.workdates)
+    print(joris_schedule.restdates)
     joris_schedule.print_schedule()
-
+    jorisRooster = Offshore_rooster('Joris',joris,joris_schedule)
+    jorisRooster.add_schedule()
+    jorisRooster.print_rooster()
 if __name__ == '__main__':
     main()
