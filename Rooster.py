@@ -66,13 +66,25 @@ class Schedule:
         self.first_date = input(f'What is the date of your first day of work?:(dd-mm-yyyy):')
         return self.first_date
 
-    def get_periodes_in_scope(self):
-       pass
+    def get_periodes_in_scope(self)->int:
+        """ 
+        ! first initioate instance and add periods.
+        Returns the amount of periods in the app scope.
+        """
+        amount=0
+        for period in self.SchedulePeriods:
+            period_days = period.workdays +period.restdays
+            amount += period_days
+        return (app.scope//amount)+1
             
 
 
-    # def get_workdates(self):
-    #     pass
+    def get_workdates(self):
+        """ 
+        Mischien het aantal periodes inde scope in een lijst zetten en dan door de oijst iterreren voor de startdates????????????
+        """
+        for i in range(0,self.get_periodes_in_scope()):
+            print(i)
     # def get_restdates(self):
     #     pass
 # class workdates ???????????????????????
@@ -121,15 +133,17 @@ Offshore = Period('Werk',14,21)
 # print(Offshore.restdays)
 # Create a schedule. Example
 Vliegen = Schedule('Vliegen')
-Vliegen.get_periodes_in_scope()
+
 # Vliegen.get_first_startdate()
 # print(Vliegen.first_date)
 # print(Vliegen.id)
 # Add periodes to the schedule.
 Vliegen.add_period(VliegenKort)
 Vliegen.add_period(VliegenLang)
-Vliegen.print_schedules()
+# Vliegen.print_schedules()
+Vliegen.get_periodes_in_scope()
 # Based on first startdate and periodes get workdates.
+Vliegen.get_workdates()
 # Based on first startdate and periodes get restdates.
 # Create a Calendar instance.
 calendar= Calendar('Werk Kalender')
