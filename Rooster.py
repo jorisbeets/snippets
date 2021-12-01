@@ -1,5 +1,5 @@
 from typing import List
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 
 class Person:
     name: str
@@ -59,12 +59,21 @@ class Schedule:
             print(f'Periode {self.SchedulePeriods.index(periode)+1} heet {periode.id} en is {periode.workdays} dagen op en {periode.restdays} dagen af.')
 
 
-    def get_first_startdate(self, first_date = '1-1-2020'):
+    def get_first_startdate(self):
         """ 
         get_first_startdate asks the User for the first date of the first Period. This is later used to calculate all other dates.
         """
-        self.first_date = input(f'What is the date of your first day of work?:(dd-mm-yyyy):')
+        self.first_date = '1-1-2021'
+        # self.first_date = input(f'What is the date of your first day of work?:(dd-mm-yyyy):')
         return self.first_date
+
+    def get_schedule_length(self)-> int:
+        length =0
+        for period in self.SchedulePeriods:
+            length_period = period.workdays+period.restdays
+            length += length_period
+        print(length)
+        return length
 
     def get_periodes_in_scope(self)->int:
         """ 
@@ -72,19 +81,28 @@ class Schedule:
         Returns the amount of periods in the app scope.
         """
         amount=0
+        schedule_length=0
         for period in self.SchedulePeriods:
             period_days = period.workdays +period.restdays
             amount += period_days
-        return (app.scope//amount)+1
+        amount = (app.scope//amount)+1
+        return amount
             
-
-
-    def get_workdates(self):
+    def get_startdates(self)->List[date]:
         """ 
-        Mischien het aantal periodes inde scope in een lijst zetten en dan door de oijst iterreren voor de startdates????????????
+        Mischien het aantal periodes inde scope in een lijst zetten en dan door de lijst iterreren voor de startdates????????????
         """
-        for i in range(0,self.get_periodes_in_scope()):
-            print(i)
+        stardates:List[datetime.date]=[]
+        schedule_length = self.SchedulePeriods[0].workdays +self.SchedulePeriods[1].workdays+ self.SchedulePeriods[0].restdays+self.SchedulePeriods[1].restdays
+        for period in range(0,self.get_periodes_in_scope()):
+            startdate = datetime.strptime(self.first_date,'%d-%m-%Y').date()+timedelta(days=schedule_length)
+            self.first_date = datetime.strftime(startdate, '%d-%m-%Y')
+            self.startdates.append(startdate)
+        # for date in self.startdates:
+        #     print(date)
+        return stardates
+
+        
     # def get_restdates(self):
     #     pass
 # class workdates ???????????????????????
@@ -133,17 +151,19 @@ Offshore = Period('Werk',14,21)
 # print(Offshore.restdays)
 # Create a schedule. Example
 Vliegen = Schedule('Vliegen')
-
-# Vliegen.get_first_startdate()
-# print(Vliegen.first_date)
+Vliegen.get_first_startdate()
+print(Vliegen.first_date)
 # print(Vliegen.id)
 # Add periodes to the schedule.
 Vliegen.add_period(VliegenKort)
 Vliegen.add_period(VliegenLang)
 # Vliegen.print_schedules()
-Vliegen.get_periodes_in_scope()
+
+# Vliegen.get_schedule_length()
+# Vliegen.get_periodes_in_scope()
 # Based on first startdate and periodes get workdates.
-Vliegen.get_workdates()
+Vliegen.get_startdates()
+print(Vliegen.startdates)
 # Based on first startdate and periodes get restdates.
 # Create a Calendar instance.
 calendar= Calendar('Werk Kalender')
