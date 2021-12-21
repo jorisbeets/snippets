@@ -1,3 +1,4 @@
+# Copied from saleor/core/ on github.
 class DistanceUnits:
     CM = "cm"
     M = "m"
